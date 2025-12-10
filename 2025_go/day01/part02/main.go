@@ -42,7 +42,7 @@ func main() {
 	}
 	var movements []move
 
-	f, err := os.Open("input.txt")
+	f, err := os.Open("../input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}

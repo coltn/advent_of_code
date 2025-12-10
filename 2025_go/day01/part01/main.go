@@ -9,6 +9,11 @@ import (
 	"strconv"
 )
 
+type move struct {
+	direction rune
+	amount int
+}
+
 type Uint100_t uint8
 const mod = 100
 
@@ -29,20 +34,9 @@ func (u Uint100_t) Sub(x int) Uint100_t {
 
 
 func main() {
-	/*
-	data, err := os.ReadFile("input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(data))
-	*/
-	type move struct {
-		direction rune
-		amount int
-	}
 	var movements []move
 
-	f, err := os.Open("input.txt")
+	f, err := os.Open("../input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
