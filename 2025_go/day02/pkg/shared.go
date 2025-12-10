@@ -2,17 +2,36 @@ package day02
 
 import (
 	"bufio"
-	"strconv"
 	"io"
+	"strconv"
+	"slices"
 )
 
-type Range_t struct {
+type RangeInt struct {
 	Start int
 	End int
 }
 
-func ParseInputToRanges(reader *bufio.Reader) ([]Range_t, error) {
-	var ranges []Range_t
+
+func FindInvalidIdHalf(ranges []RangeInt) []int {
+	var invalid []int
+	for _, id_range := range ranges {
+		for current := id_range.Start; current <= id_range.End; current ++ {
+			elem := []rune(strconv.Itoa(current))
+			l := len(elem)
+			if (l / 2) % 2 == 0 {
+				if slices.Compare(elem[:l / 2], elem[l / 2:]) == 0 {
+					invalid = append(invalid, current)
+				}
+			}
+		}
+	}
+
+	return invalid
+}
+
+func ParseInputToRanges(reader *bufio.Reader) ([]RangeInt, error) {
+	var ranges []RangeInt
 
 	for {
 		start_data, err := reader.ReadBytes(byte('-'))
@@ -37,7 +56,7 @@ func ParseInputToRanges(reader *bufio.Reader) ([]Range_t, error) {
 			return ranges, err
 		}
 		
-		ranges = append(ranges, Range_t{
+		ranges = append(ranges, RangeInt {
 			Start: start,
 			End: end,
 		})

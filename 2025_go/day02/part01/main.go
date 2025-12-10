@@ -27,7 +27,13 @@ func main() {
 	}
 
 
-	for _, id_range := range ranges {
-		fmt.Println(id_range)
+
+	invalid := day02.FindInvalidIdHalf(ranges)
+
+	answer := 0
+	for _, id := range invalid {
+		answer += id
 	}
+
+	fmt.Println(answer)
 }
