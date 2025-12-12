@@ -3,7 +3,32 @@ package day03
 import (
 	"bufio"
 	"fmt"
+	"math"
 )
+
+func getBankJoltageBeforeY(line string, y int) (int, string, error) {
+
+	l := len(line)
+	max := 0
+	searching := line[:l - y]
+	var leftover string
+
+	for i, r := range searching {
+		n := int(r - '0')
+		if n < 0 || n > 9 {
+			err := fmt.Errorf("Found invalid rune in line: %v\n", r)
+			return 0, "", err
+		}
+
+		if n > max {
+			leftover = line[i + 1:]
+			max = n
+		}
+	}
+
+
+	return max, leftover, nil
+}
 
 
 func getBankJoltage(line string) (int, error) {
@@ -46,6 +71,32 @@ func getBankJoltage(line string) (int, error) {
 
 	return final, nil
 
+}
+
+func FindAmountOfJoltages(scanner *bufio.Scanner, amount int) ([]int, error) {
+	var joltages []int
+	for scanner.Scan() {
+		bank := scanner.Text()
+		bank_total := 0
+		var joltage int
+		for ;amount >= 0; amount-- {
+			var err error
+			joltage, bank, err = getBankJoltageBeforeY(bank, amount)
+			if err != nil {
+				err = fmt.Errorf("Could not getBankJoltage on bank: %v\n got error: %v\n", bank, err)
+			}
+
+			if amount > 0 {
+				bank_total += joltage * int(math.Pow10(amount))
+			} else {
+				bank_total += joltage
+			}
+		}
+
+		joltages = append(joltages, joltage)
+	}
+
+	return joltages, nil
 }
 
 func FindJoltages(scanner *bufio.Scanner) ([]int, error) {
