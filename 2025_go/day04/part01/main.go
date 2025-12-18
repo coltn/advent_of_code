@@ -22,7 +22,6 @@ func main() {
 
 	scanner := bufio.NewScanner(f)
 
-	rows := day04.InitRows(scanner)
 	
 
 

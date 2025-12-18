@@ -63,3 +63,31 @@ func InitRows(scanner *bufio.Scanner) (Rows, error) {
 }
 
 
+func FindRolls {
+	const PAPER_ROLL rune = '@'
+
+	var prev []rune = nil
+	var current []rune
+	var next []rune
+	total_count := 0
+
+	for scanner.Scan() {
+		current = []rune(scanner.Text())
+		if scanner.Scan() {
+			next = []rune(scanner.Text())
+		} else {
+			next = nil
+		}
+
+
+		for i, r := range current {
+			nearby := 0
+			if r == PAPER_ROLL {
+			}
+		}
+
+
+
+		prev = current
+	}
+}
