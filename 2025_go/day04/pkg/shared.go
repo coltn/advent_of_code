@@ -41,14 +41,17 @@ func FindRolls(input *bufio.Reader) (int, error) {
 
 	for {
 
-		// debug
-		fmt.Printf("%v", string(rows.Current))
 
 		for i, r := range rows.Current {
 			if r == PAPER_ROLL {
 				if checkRows(rows, i) {
+					fmt.Printf("%v", string('x'))
 					total_count ++
-				} 
+				} else {
+					fmt.Printf("%v", string(r))
+				}
+			} else {
+				fmt.Printf("%v", string(r))
 			}
 
 		}
@@ -70,22 +73,24 @@ func FindRolls(input *bufio.Reader) (int, error) {
 	return total_count, nil
 }
 
-func checkRows(rows Rows, position int) bool {
+func checkRows(rows Rows, col_position int) bool {
 	roll_count := 0
-	end := len(rows.Current)
+	row_end := len(rows.Current)
 	
-	if position != 0 {
-		roll_count += checkPosition(rows.Prev, position - 1)
-		roll_count += checkPosition(rows.Current, position - 1)
-		roll_count += checkPosition(rows.Next, position - 1)
-	} else if position != end {
-		roll_count += checkPosition(rows.Prev, position + 1)
-		roll_count += checkPosition(rows.Current, position + 1)
-		roll_count += checkPosition(rows.Next, position + 1)
+	if col_position != 0 {
+		roll_count += checkPosition(rows.Prev, col_position - 1)
+		roll_count += checkPosition(rows.Current, col_position - 1)
+		roll_count += checkPosition(rows.Next, col_position - 1)
+	} 
+
+	if col_position != row_end - 1 {
+		roll_count += checkPosition(rows.Prev, col_position + 1)
+		roll_count += checkPosition(rows.Current, col_position + 1)
+		roll_count += checkPosition(rows.Next, col_position + 1)
 	}
 
-	roll_count += checkPosition(rows.Prev, position)
-	roll_count += checkPosition(rows.Next, position)
+	roll_count += checkPosition(rows.Prev, col_position)
+	roll_count += checkPosition(rows.Next, col_position)
 
 	return roll_count < TARGET_COUNT
 }

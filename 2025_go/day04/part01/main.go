@@ -15,7 +15,7 @@ import (
 
 func main() {
 
-	f, err := os.Open("../small_input.txt")
+	f, err := os.Open("../input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -24,10 +24,4 @@ func main() {
 	reader := bufio.NewReader(f)
 
 	fmt.Println(day04.FindRolls(reader))
-
-	
-
-
-
-
 }
