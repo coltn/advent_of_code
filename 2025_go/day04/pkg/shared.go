@@ -3,7 +3,7 @@ package day04
 
 import (
 	"bufio"
-	"errors"
+	"bytes"
 	"fmt"
 )
 
@@ -13,81 +13,91 @@ type Rows struct {
 	Next []rune
 }
 
+const TARGET_COUNT int = 4
+const PAPER_ROLL rune = '@'
+const DELIM byte = '\n'
 
-func getRows(scanner *bufio.Scanner, n int) ([][]rune, error) {
-	i := 1
-	row := []rune(scanner.Text())
-	rows := make([][]rune, n)
-	rows[0] = row
-	for ;scanner.Scan() && i > n; i ++ {
-		rows[i] = []rune(scanner.Text())
+
+
+func FindRolls(input *bufio.Reader) (int, error) {
+
+	current, err := input.ReadBytes(DELIM)
+	if err != nil {
+		return 0, err
+	}
+	next, err := input.ReadBytes(DELIM)
+	if err != nil {
+		return 0, err
 	}
 
-	return rows, nil
-}
 
-func GetNextRow(rows Rows, scanner *bufio.Scanner) (Rows, error) {
-	if rows.Current == nil {
-		return rows, fmt.Errorf("rows not initialized\n")
+
+	rows := Rows {
+		Prev: nil,
+		Current: bytes.Runes(current),
+		Next: bytes.Runes(next),
 	}
-
-	if rows.Next == nil {
-		return rows, errors.New("EOF")
-	}
-
-	rows.Prev = rows.Current
-	rows.Current = rows.Next
-	if scanner.Scan() {
-		rows.Next = []rune(scanner.Text())
-	} else {
-		rows.Next = nil
-	}
-
-	return rows, nil
-
-}
-
-func InitRows(scanner *bufio.Scanner) (Rows, error) {
-	var rows Rows
-	rows.Prev = nil
-
-	if !scanner.Scan() {
-		rows, fmt.Errorf("failed to init rows, could not scanner.Scan()\n")
-	}
-	rows.Current = scanner.Text()
-
-	if !scanner.Scan() {
-		rows, fmt.Errorf("failed to init rows, could not scanner.Scan()\n")
-	}
-	rows.Next = Scanner.Text()
-}
-
-
-func FindRolls {
-	const PAPER_ROLL rune = '@'
-
-	var prev []rune = nil
-	var current []rune
-	var next []rune
 	total_count := 0
 
-	for scanner.Scan() {
-		current = []rune(scanner.Text())
-		if scanner.Scan() {
-			next = []rune(scanner.Text())
-		} else {
-			next = nil
-		}
+	for {
 
+		// debug
+		fmt.Printf("%v", string(rows.Current))
 
-		for i, r := range current {
-			nearby := 0
+		for i, r := range rows.Current {
 			if r == PAPER_ROLL {
+				if checkRows(rows, i) {
+					total_count ++
+				} 
 			}
+
 		}
 
+		if rows.Next == nil {
+			break
+		}
 
-
-		prev = current
+		rows.Prev = rows.Current
+		rows.Current = rows.Next
+		next_bytes, err := input.ReadBytes(DELIM)
+		if err != nil {
+			rows.Next = nil
+		} else {
+			rows.Next = bytes.Runes(next_bytes)
+		}
 	}
+
+	return total_count, nil
+}
+
+func checkRows(rows Rows, position int) bool {
+	roll_count := 0
+	end := len(rows.Current)
+	
+	if position != 0 {
+		roll_count += checkPosition(rows.Prev, position - 1)
+		roll_count += checkPosition(rows.Current, position - 1)
+		roll_count += checkPosition(rows.Next, position - 1)
+	} else if position != end {
+		roll_count += checkPosition(rows.Prev, position + 1)
+		roll_count += checkPosition(rows.Current, position + 1)
+		roll_count += checkPosition(rows.Next, position + 1)
+	}
+
+	roll_count += checkPosition(rows.Prev, position)
+	roll_count += checkPosition(rows.Next, position)
+
+	return roll_count < TARGET_COUNT
+}
+
+func checkPosition(row []rune, position int) int {
+	if row == nil {
+		return 0
+	}
+
+	if row[position] == PAPER_ROLL {
+		return 1
+	}
+
+	return 0
 }

@@ -5,6 +5,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 
@@ -14,13 +15,15 @@ import (
 
 func main() {
 
-	f, err := os.Open("../input.txt")
+	f, err := os.Open("../small_input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer f.Close()
 
-	scanner := bufio.NewScanner(f)
+	reader := bufio.NewReader(f)
+
+	fmt.Println(day04.FindRolls(reader))
 
 	
 
