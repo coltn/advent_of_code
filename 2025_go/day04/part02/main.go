@@ -1,6 +1,6 @@
 package main
 
-/* day04/part01 */
+/* day04/part02 */
 
 
 import (
@@ -21,9 +21,14 @@ func main() {
 	}
 	defer f.Close()
 
-	reader := bufio.NewReader(f)
+	scanner := bufio.NewScanner(f)
 
-	answer, err := day04.FindRollsInFile(reader)
+	grid, err := day04.LoadFileIntoMemory(scanner)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	answer := day04.FindRollsInMemory(grid)
 	if err != nil {
 		log.Fatal(err)
 	}
