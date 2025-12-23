@@ -115,7 +115,7 @@ func LoadFileIntoMemory(input *bufio.Scanner) ([][]rune, error) {
 		grid = append(grid, []rune(input.Text()))
 	}
 
-	return grid, nil
+	return grid, input.Err()
 }
 
 func FindRollsInMemory(grid [][]rune) int {
@@ -137,6 +137,10 @@ func FindRollsInMemory(grid [][]rune) int {
 							continue
 						}
 						for c_offs := -1; c_offs < 2; c_offs ++ {
+							if r_offs == 0 && c_offs == 0 {
+								continue
+							}
+
 							c_io := c_idx + c_offs
 
 							if c_io < 0 || c_io > n_col - 1 {
@@ -149,13 +153,19 @@ func FindRollsInMemory(grid [][]rune) int {
 						}
 					}
 
-					if nearby_rolls <= TARGET_COUNT { 
+					if nearby_rolls < TARGET_COUNT { 
 						moveable ++
 						r = 'x'
 					}
 				}
 
 
+				/* 
+ 				 * mutating grid in place asynchronously
+				 * technically wrong--AoC says to mutate the grid in one synchronous step
+ 				 * but i can't be bothered right now, and this gets the result we need.
+				 * removals are monotonic and accelerate convergence
+ 				 */
 				grid[r_idx][c_idx] = r
 			}
 		}
