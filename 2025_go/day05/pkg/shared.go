@@ -109,3 +109,47 @@ func FindValuesInRanges(ranges []Range, values []int) int {
 
 	return matches
 }
+
+
+/*
+ * for my second attempt:
+ * I am going to sort `ranges` in asc, get unique id's from r.High - r.Low
+ * then track r.High before inc r to next range, check if r.Low is < than the last
+ * r.High, if so use r.High - last_r.High
+ */
+
+func CountValidIDsInRanges(ranges []Range) int {
+	count := 0
+	last_high := 0
+	
+	for	_, r := range ranges {
+		count +=
+
+	}
+
+
+	return count
+}
+
+/* 
+ * the function below does work on a smaller data set,
+ * but once you use the full input file, n^2 items is too much to store, and it takes too long.
+ * program runs until my laptop runs out of memory (32GiB)
+ */
+func oldCountValidIDsInRanges(ranges []Range) int {
+	unique := make(map[int]struct{}, 0)
+	
+	for	_, r := range ranges {
+		for id := r.Low; id <= r.High; id ++ {
+			unique[id] = struct{}{}
+		}
+
+	}
+
+	count := 0
+	for range unique {
+		count ++
+	}
+
+	return count
+}
