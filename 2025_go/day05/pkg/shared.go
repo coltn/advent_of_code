@@ -6,6 +6,7 @@ import (
 	"io"
 	"errors"
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -119,12 +120,32 @@ func FindValuesInRanges(ranges []Range, values []int) int {
  */
 
 func CountValidIDsInRanges(ranges []Range) int {
+
+	fmt.Printf("%v\n", ranges)
+	sort.Slice(ranges, func(i, j int) bool {return ranges[i].Low < ranges[j].Low}) 
+
+	fmt.Printf("ranges sorted\n")
+	fmt.Printf("%v\n", ranges)
+
+
 	count := 0
 	last_high := 0
 	
 	for	_, r := range ranges {
-		count +=
+		new := 0
+		if r.High < last_high {
+			continue	
+		}
+		if last_high > r.Low {
+			new = r.High - last_high
+		} else {
+			new = r.High - r.Low
+		}
 
+		last_high = r.High
+
+		fmt.Println(r.High - r.Low)
+		count += new 
 	}
 
 
