@@ -1,14 +1,14 @@
-
 package day06
 
 import (
 	"bufio"
-	"unicode"
+	"strconv"
+	"strings"
 )
 
 type Problem struct {
-	values []int;
-	operator rune;
+	Values []int;
+	Operator string;
 }
 
 
@@ -20,32 +20,54 @@ func LoadFileIntoMemory(input *bufio.Reader) ([]Problem, error) {
 
 	var problems []Problem
 
-	row := 0
 	for {
 		line, err := input.ReadString(DELIM)
 		if err != nil {
 			break
 		}
 
+		chars := strings.Split(line, " ")
+
+
 		col := 0
-		for _, r := range line {
-			if unicode.IsSpace(r) {
+		for _, r := range chars {
+
+			if r == " " || r == "\n" || r == "" {
 				continue
 			}
 
-			if len(problems) < col {
-				
+			r = strings.TrimSpace(r)
+
+
+			if len(problems) < col + 1 {
+				problems = append(problems, Problem{})
 			}
 
-			if unicode.IsNumber(r) {
-				problems[col].values[row] = int(r)
-				row ++
-			} else {
-				problems[col].operator = r
+			n, err := strconv.Atoi(r)
+			if err != nil {
+				problems[col].Operator = r
+				col ++
+				continue
 			}
+
+			problems[col].Values = append(problems[col].Values, n)
 			col ++
 		}
 	}
 
 	return problems, nil
+}
+
+func HandleProblems(problems []Problem) int {
+	totals := make([]int, len(problems))
+
+	for i, p := range problems {
+		sum := 0
+		for _, v range p.Values {
+			
+
+		}
+
+		total[i] = sum
+	}
 }

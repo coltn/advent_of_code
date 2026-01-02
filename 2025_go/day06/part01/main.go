@@ -9,7 +9,7 @@ import (
 	"log"
 	"os"
 
-	 day05 "aoc/2025_go/day05/pkg"
+	 day06 "aoc/2025_go/day06/pkg"
 )
 
 
@@ -28,6 +28,10 @@ func main() {
 		log.Fatal(err)
 	}
 
+
+	answer := day06.HandleProblems(problems)
+
+	fmt.Println(answer)
 
 
 
