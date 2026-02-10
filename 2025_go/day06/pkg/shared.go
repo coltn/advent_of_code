@@ -2,6 +2,7 @@ package day06
 
 import (
 	"bufio"
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -59,15 +60,43 @@ func LoadFileIntoMemory(input *bufio.Reader) ([]Problem, error) {
 }
 
 func HandleProblems(problems []Problem) int {
-	totals := make([]int, len(problems))
+	total := 0
 
-	for i, p := range problems {
-		sum := 0
-		for _, v range p.Values {
+	for _, p := range problems {
+		sumProblem := 0
+		for i, v := range p.Values {
+			if i == 0 {
+				sumProblem = v
+				continue
+			}
+
+			sum, err := handleOperation(sumProblem, v, p.Operator)
+			if err != nil {
+				fmt.Printf("Error: %v", err)
+				continue
+			}
+			sumProblem = sum
+			
+
 			
 
 		}
 
-		total[i] = sum
+		total += sumProblem
+
+	}
+
+	return total
+}
+
+func handleOperation(sum int, value int, operator string) (int, error) {
+	switch operator {
+	case "*":
+		return sum * value, nil
+	case "+":
+		return sum + value, nil
+	default:
+		return 0, fmt.Errorf("unkown operator: %v\n", operator)
 	}
 }
+
